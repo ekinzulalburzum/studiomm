@@ -8,7 +8,8 @@ import {BackupContact, ContactInfo} from './BackupContact';
 import {TriggerOverlay} from './TriggerOverlay';
 import {generateEmergencyCallMessage} from '@/ai/flows/generate-emergency-call-message';
 import {useToast} from '@/hooks/use-toast';
-import {Shield, Bell} from 'lucide-react';
+import {Shield, Bell, Settings2} from 'lucide-react';
+import {Dialog, DialogContent, DialogHeader, DialogTitle} from '@/components/ui/dialog';
 
 const ALARM_SOUNDS = [
   "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
@@ -32,6 +33,7 @@ export function GuardianWakeApp() {
   const [countdown, setCountdown] = useState(300);
   const [aiMessage, setAiMessage] = useState("");
   const [isCalling, setIsCalling] = useState(false);
+  const [isConfigOpen, setIsConfigOpen] = useState(false);
 
   const countdownInterval = useRef<NodeJS.Timeout | null>(null);
   const alarmCheckInterval = useRef<NodeJS.Timeout | null>(null);
@@ -127,11 +129,13 @@ export function GuardianWakeApp() {
         description: "Lütfen önce aranacak bir kişi ve numara belirleyin.",
         variant: "destructive",
       });
+      setIsConfigOpen(true);
       return;
     }
     setAlarmTime(time);
     setAlarmDays(days);
     setSystemState("active");
+    setIsConfigOpen(false);
     toast({
       title: "Nöbet Başladı",
       description: `Belirlenen günlerde saat ${time} için koruma aktif.`,
@@ -139,64 +143,86 @@ export function GuardianWakeApp() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background selection:bg-primary/10">
+    <div className="min-h-screen flex flex-col bg-background text-foreground selection:bg-primary/20">
       <audio ref={audioRef} hidden />
       
-      <header className="container mx-auto py-8 px-6 flex items-center justify-between border-b border-black/5">
+      <header className="container mx-auto py-8 px-6 flex items-center justify-between border-b border-white/5">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white">
-            <Shield className="w-5 h-5" />
+          <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-background shadow-lg shadow-primary/20">
+            <Shield className="w-6 h-6" />
           </div>
-          <h1 className="text-xl font-bold tracking-tight">VIGIL</h1>
+          <h1 className="text-2xl font-black tracking-tighter">VIGIL</h1>
         </div>
-        <AlarmStatus state={systemState} countdown={countdown} />
+        <div className="flex items-center gap-4">
+          <AlarmStatus state={systemState} countdown={countdown} />
+          <button 
+            onClick={() => setIsConfigOpen(true)}
+            className="p-2 hover:bg-white/5 rounded-full transition-colors"
+          >
+            <Settings2 className="w-6 h-6 text-muted-foreground" />
+          </button>
+        </div>
       </header>
 
-      <main className="container mx-auto flex-1 grid grid-cols-1 lg:grid-cols-12 gap-8 py-12 px-6">
-        <div className="lg:col-span-8 flex flex-col items-center justify-center space-y-12">
-          <ClockDisplay />
+      <main className="container mx-auto flex-1 flex flex-col items-center justify-center p-6">
+        <div className="w-full max-w-4xl flex flex-col items-center space-y-12">
+          <ClockDisplay 
+            onClick={() => setIsConfigOpen(true)} 
+            isActive={systemState === 'active'}
+          />
           
           {systemState === 'countdown' && (
-            <div className="flex flex-col items-center space-y-8 animate-in fade-in zoom-in duration-500">
-              <div className="flex items-center gap-2 text-primary animate-pulse">
-                <Bell className="w-5 h-5" />
-                <span className="text-sm font-bold uppercase tracking-widest">Alarm Çalıyor - Onay Bekleniyor</span>
+            <div className="flex flex-col items-center space-y-8 animate-in fade-in zoom-in duration-700">
+              <div className="flex items-center gap-3 text-primary animate-pulse">
+                <Bell className="w-6 h-6" />
+                <span className="text-lg font-bold uppercase tracking-[0.2em]">DOĞRULAMA BEKLENİYOR</span>
               </div>
               <button
                 onClick={handleDismiss}
-                className="w-64 h-64 rounded-full bg-primary text-white text-2xl font-black shadow-2xl shadow-primary/40 hover:scale-105 active:scale-95 transition-all flex flex-col items-center justify-center border-8 border-white/20"
+                className="w-72 h-72 rounded-full bg-primary text-background text-3xl font-black shadow-[0_0_50px_rgba(var(--primary),0.3)] hover:scale-105 active:scale-95 transition-all flex flex-col items-center justify-center border-4 border-white/10"
               >
                 GÜVENDENİM
-                <span className="text-xs font-normal opacity-70 mt-2">Aramayı İptal Et</span>
+                <span className="text-xs font-bold opacity-60 mt-2 tracking-widest uppercase">Durdurmak İçin Bas</span>
               </button>
             </div>
           )}
 
-          {systemState === 'active' && (
-            <div className="flex items-center gap-3 bg-muted/20 px-6 py-2 rounded-full border border-border/50">
-              <Shield className="w-4 h-4 text-primary" />
-              <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">VIGIL Nöbette: Kesintisiz Koruma</span>
+          {systemState === 'active' && alarmTime && (
+            <div className="flex flex-col items-center gap-4 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+              <div className="flex items-center gap-3 bg-primary/10 px-8 py-3 rounded-2xl border border-primary/20">
+                <Bell className="w-5 h-5 text-primary" />
+                <span className="text-xl font-bold text-primary tabular-nums">{alarmTime}</span>
+              </div>
+              <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-muted-foreground">Aktif Koruma Periyodu</span>
             </div>
           )}
         </div>
-
-        <div className="lg:col-span-4 flex flex-col gap-6">
-          <AlarmScheduler 
-            activeAlarm={alarmTime} 
-            activeDays={alarmDays}
-            onSetAlarm={setAlarm}
-            onClearAlarm={() => {
-              setAlarmTime(null);
-              setAlarmDays([]);
-              setSystemState("standby");
-            }} 
-          />
-          <BackupContact 
-            contact={contact} 
-            onUpdate={setContact} 
-          />
-        </div>
       </main>
+
+      <Dialog open={isConfigOpen} onOpenChange={setIsConfigOpen}>
+        <DialogContent className="bg-card border-white/10 max-w-md rounded-[2rem]">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-black tracking-tight text-center">ALARM AYARLARI</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-6 pt-4">
+            <AlarmScheduler 
+              activeAlarm={alarmTime} 
+              activeDays={alarmDays}
+              onSetAlarm={setAlarm}
+              onClearAlarm={() => {
+                setAlarmTime(null);
+                setAlarmDays([]);
+                setSystemState("standby");
+                setIsConfigOpen(false);
+              }} 
+            />
+            <BackupContact 
+              contact={contact} 
+              onUpdate={setContact} 
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {systemState === "triggering" && (
         <TriggerOverlay 
@@ -206,6 +232,8 @@ export function GuardianWakeApp() {
           contactName={contact.name}
         />
       )}
+
+      {/* Belirtilen turbo jet vb semboller kaldırıldı, en alt metinler temizlendi */}
     </div>
   );
 }
