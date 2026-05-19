@@ -4,26 +4,26 @@
 
 @layer base {
   :root {
-    --background: 252 22% 10%;
-    --foreground: 210 20% 98%;
-    --card: 252 22% 12%;
-    --card-foreground: 210 20% 98%;
-    --popover: 252 22% 10%;
-    --popover-foreground: 210 20% 98%;
-    --primary: 245 80% 71%;
-    --primary-foreground: 252 22% 10%;
-    --secondary: 252 22% 18%;
-    --secondary-foreground: 210 20% 98%;
-    --muted: 252 22% 18%;
-    --muted-foreground: 245 10% 70%;
-    --accent: 216 100% 59%;
-    --accent-foreground: 210 20% 98%;
+    --background: 210 20% 98%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 245 80% 60%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222 47% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222 47% 11.2%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 20% 98%;
-    --border: 252 22% 20%;
-    --input: 252 22% 20%;
-    --ring: 245 80% 71%;
-    --radius: 1rem;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 245 80% 60%;
+    --radius: 0.75rem;
   }
 }
 
@@ -32,34 +32,17 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-body;
   }
 }
 
-@keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(130, 120, 242, 0.2);
-    transform: scale(1);
-  }
-  50% {
-    box-shadow: 0 0 40px rgba(130, 120, 242, 0.4);
-    transform: scale(1.02);
-  }
+.neon-border-soft {
+  border: 1px solid rgba(130, 120, 242, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
-.animate-pulse-glow {
-  animation: pulse-glow 3s ease-in-out infinite;
-}
-
-.neon-border {
-  border: 1px solid rgba(130, 120, 242, 0.3);
-  box-shadow: 0 0 10px rgba(130, 120, 242, 0.1);
-}
-
-.neon-text-primary {
-  text-shadow: 0 0 10px rgba(130, 120, 242, 0.5);
-}
-
-.neon-text-accent {
-  text-shadow: 0 0 10px rgba(46, 129, 255, 0.5);
+.text-gradient {
+  background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
