@@ -1,0 +1,10 @@
+{
+  "placeholderImages": [
+    {
+      "id": "hero-night",
+      "description": "A serene night sky with a subtle indigo glow",
+      "imageUrl": "https://picsum.photos/seed/guardian-night/1200/800",
+      "imageHint": "night sky"
+    }
+  ]
+}
