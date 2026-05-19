@@ -15,7 +15,7 @@ export function GuardianWakeApp() {
   const [systemState, setSystemState] = useState<SystemState>("standby");
   const [alarmTime, setAlarmTime] = useState<string | null>(null);
   const [contact, setContact] = useState<ContactInfo>({
-    name: "Emergency Guardian",
+    name: "Acil Durum Koruyucusu",
     phone: "",
     customMessage: "",
   });
@@ -26,7 +26,6 @@ export function GuardianWakeApp() {
   const countdownInterval = useRef<NodeJS.Timeout | null>(null);
   const alarmCheckInterval = useRef<NodeJS.Timeout | null>(null);
 
-  // Alarm Monitoring Logic
   useEffect(() => {
     alarmCheckInterval.current = setInterval(() => {
       if (systemState === "active" && alarmTime) {
@@ -37,7 +36,7 @@ export function GuardianWakeApp() {
           triggerGracePeriod();
         }
       }
-    }, 10000); // Check every 10 seconds
+    }, 10000);
 
     return () => {
       if (alarmCheckInterval.current) clearInterval(alarmCheckInterval.current);
@@ -48,8 +47,8 @@ export function GuardianWakeApp() {
     setSystemState("countdown");
     setCountdown(300);
     toast({
-      title: "Wake Up Check",
-      description: "Alarm triggered. You have 5 minutes to dismiss before emergency alert.",
+      title: "Uyanma Kontrolü",
+      description: "Alarm çaldı. Acil durum uyarısı öncesi 5 dakikanız var.",
       variant: "default",
     });
 
@@ -71,15 +70,15 @@ export function GuardianWakeApp() {
     
     try {
       const result = await generateEmergencyCallMessage({
-        userName: "GuardianWake User",
+        userName: "VefaAlarm Kullanıcısı",
         emergencyContactName: contact.name,
-        timeMissed: alarmTime || "Recently",
+        timeMissed: alarmTime || "Yeni",
         customMessage: contact.customMessage
       });
       setAiMessage(result.message);
     } catch (error) {
       console.error("AI Generation failed", error);
-      setAiMessage(`Hello ${contact.name}, this is an automated alert. Your contact missed their alarm at ${alarmTime} and has not responded. Please check on them.`);
+      setAiMessage(`Merhaba ${contact.name}, bu otomatik bir uyarıdır. Yakınınız ${alarmTime} saatindeki alarmını kaçırdı ve yanıt vermedi. Lütfen kendisini kontrol edin.`);
     }
   };
 
@@ -89,16 +88,16 @@ export function GuardianWakeApp() {
     setCountdown(300);
     setIsCalling(false);
     toast({
-      title: "Response Verified",
-      description: "GuardianWake protection remains active.",
+      title: "Yanıt Doğrulandı",
+      description: "VefaAlarm koruması aktif kalmaya devam ediyor.",
     });
   };
 
   const setAlarm = (time: string) => {
     if (!contact.phone) {
       toast({
-        title: "Configuration Required",
-        description: "Please set a backup contact before activating the alarm.",
+        title: "Yapılandırma Gerekli",
+        description: "Alarmı etkinleştirmeden önce bir yedek kişi ayarlayın.",
         variant: "destructive",
       });
       return;
@@ -109,13 +108,11 @@ export function GuardianWakeApp() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-between py-12 px-6 relative overflow-hidden">
-      {/* Background Ambience */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px] animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-accent/10 rounded-full blur-[100px] animate-pulse-glow" />
       </div>
 
-      {/* Header */}
       <header className="z-10 w-full max-w-5xl flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-center gap-3 group">
           <div className="p-3 rounded-2xl bg-primary/20 group-hover:bg-primary/30 transition-colors neon-border">
@@ -123,20 +120,18 @@ export function GuardianWakeApp() {
           </div>
           <div className="flex flex-col">
             <h1 className="text-3xl font-bold tracking-tighter text-foreground font-headline">
-              GUARDIAN<span className="text-primary italic">WAKE</span>
+              VEFA<span className="text-primary italic">ALARM</span>
             </h1>
-            <p className="text-xs text-muted-foreground uppercase tracking-widest font-bold">Intelligent Life Support</p>
+            <p className="text-xs text-muted-foreground uppercase tracking-widest font-bold">Akıllı Yaşam Desteği</p>
           </div>
         </div>
 
         <AlarmStatus state={systemState} countdown={countdown} />
       </header>
 
-      {/* Main Display */}
       <main className="z-10 w-full max-w-5xl grid grid-cols-1 lg:grid-cols-12 gap-8 my-8 flex-1">
         <div className="lg:col-span-8 flex flex-col justify-center items-center space-y-12">
           <div className="relative w-full max-w-xl aspect-square flex items-center justify-center">
-            {/* Pulsating background for countdown */}
             {systemState === 'countdown' && (
               <div className="absolute inset-0 bg-accent/5 rounded-full border border-accent/20 animate-pulse-glow scale-125 pointer-events-none" />
             )}
@@ -151,14 +146,14 @@ export function GuardianWakeApp() {
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
                     </span>
-                    5-Minute Response Window
+                    5 Dakikalık Yanıt Süresi
                   </div>
                   
                   <button
                     onClick={handleDismiss}
                     className="w-64 h-64 rounded-full bg-primary text-primary-foreground text-3xl font-black uppercase tracking-tighter shadow-[0_0_50px_rgba(130,120,242,0.6)] hover:scale-105 active:scale-95 transition-all flex items-center justify-center text-center px-4 leading-none"
                   >
-                    I AM<br/>AWAKE
+                    UYANDIM
                   </button>
                 </div>
               )}
@@ -166,7 +161,7 @@ export function GuardianWakeApp() {
               {systemState === 'active' && (
                 <div className="flex flex-col items-center space-y-2 opacity-50">
                   <BellRing className="w-8 h-8 animate-pulse text-primary" />
-                  <p className="text-sm font-bold uppercase tracking-widest">Awaiting scheduled alarm</p>
+                  <p className="text-sm font-bold uppercase tracking-widest">Planlı alarm bekleniyor</p>
                 </div>
               )}
             </div>
@@ -190,13 +185,12 @@ export function GuardianWakeApp() {
           <div className="p-4 bg-muted/10 border border-white/5 rounded-xl flex items-start gap-3">
             <Info className="w-5 h-5 text-accent mt-0.5 shrink-0" />
             <p className="text-xs text-muted-foreground leading-relaxed">
-              <strong>GuardianWake Logic:</strong> If you don't dismiss your alarm within 5 minutes, an AI-synthesized emergency call will be placed to {contact.name || 'your guardian'}.
+              <strong>VefaAlarm Mantığı:</strong> Eğer alarmınızı 5 dakika içinde kapatmazsanız, {contact.name || 'koruyucunuza'} yapay zeka tarafından oluşturulan bir acil durum araması yapılacaktır.
             </p>
           </div>
         </div>
       </main>
 
-      {/* Overlays */}
       {systemState === "triggering" && (
         <TriggerOverlay 
           onDismiss={handleDismiss}
@@ -206,10 +200,9 @@ export function GuardianWakeApp() {
         />
       )}
 
-      {/* Footer */}
       <footer className="z-10 w-full max-w-5xl flex justify-between items-center text-[10px] text-muted-foreground uppercase tracking-[0.2em] pt-8 border-t border-white/5">
-        <span>© 2024 GuardianWake Systems</span>
-        <span>Secured Telephony Link • AI-09X</span>
+        <span>© 2024 VefaAlarm Sistemleri</span>
+        <span>Güvenli Telefon Hattı • AI-09X</span>
       </footer>
     </div>
   );

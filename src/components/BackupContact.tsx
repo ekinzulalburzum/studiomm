@@ -26,16 +26,16 @@ export function BackupContact({ contact, onUpdate }: BackupContactProps) {
   const handleSave = () => {
     if (!formData.name || !formData.phone) {
       toast({
-        title: "Configuration Error",
-        description: "Please provide both a name and a phone number.",
+        title: "Yapılandırma Hatası",
+        description: "Lütfen hem isim hem de telefon numarası giriniz.",
         variant: "destructive"
       });
       return;
     }
     onUpdate(formData);
     toast({
-      title: "Guardian Configured",
-      description: "Backup contact details have been securely saved.",
+      title: "Koruyucu Yapılandırıldı",
+      description: "Yedek iletişim bilgileri güvenli bir şekilde kaydedildi.",
     });
   };
 
@@ -44,18 +44,18 @@ export function BackupContact({ contact, onUpdate }: BackupContactProps) {
       <CardHeader>
         <div className="flex items-center gap-2">
           <ShieldCheck className="w-5 h-5 text-accent" />
-          <CardTitle className="text-lg font-bold">Emergency Guardian</CardTitle>
+          <CardTitle className="text-lg font-bold">Acil Durum Koruyucusu</CardTitle>
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-3">
           <div className="grid gap-2">
             <Label htmlFor="contact-name" className="text-xs text-muted-foreground uppercase tracking-widest flex items-center gap-2">
-              <User className="w-3 h-3" /> Guardian Name
+              <User className="w-3 h-3" /> Koruyucu Adı
             </Label>
             <Input
               id="contact-name"
-              placeholder="e.g. John Doe"
+              placeholder="örn. Ahmet Yılmaz"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               className="bg-background/50 border-white/10"
@@ -64,12 +64,12 @@ export function BackupContact({ contact, onUpdate }: BackupContactProps) {
           
           <div className="grid gap-2">
             <Label htmlFor="contact-phone" className="text-xs text-muted-foreground uppercase tracking-widest flex items-center gap-2">
-              <Phone className="w-3 h-3" /> Phone Number
+              <Phone className="w-3 h-3" /> Telefon Numarası
             </Label>
             <Input
               id="contact-phone"
               type="tel"
-              placeholder="+1 (555) 000-0000"
+              placeholder="+90 (555) 000 00 00"
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
               className="bg-background/50 border-white/10"
@@ -78,11 +78,11 @@ export function BackupContact({ contact, onUpdate }: BackupContactProps) {
 
           <div className="grid gap-2">
             <Label htmlFor="custom-msg" className="text-xs text-muted-foreground uppercase tracking-widest flex items-center gap-2">
-              <MessageSquare className="w-3 h-3" /> Custom Alert Note (Optional)
+              <MessageSquare className="w-3 h-3" /> Özel Uyarı Notu (İsteğe Bağlı)
             </Label>
             <Input
               id="custom-msg"
-              placeholder="I'm having trouble waking up today..."
+              placeholder="Bugün uyanmakta zorluk çekiyorum..."
               value={formData.customMessage}
               onChange={(e) => setFormData({ ...formData, customMessage: e.target.value })}
               className="bg-background/50 border-white/10"
@@ -95,7 +95,7 @@ export function BackupContact({ contact, onUpdate }: BackupContactProps) {
           variant="secondary" 
           className="w-full bg-accent/20 hover:bg-accent/30 text-accent border border-accent/30 font-bold"
         >
-          Verify & Save Configuration
+          Yapılandırmayı Kaydet
         </Button>
       </CardContent>
     </Card>

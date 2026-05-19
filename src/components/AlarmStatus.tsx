@@ -14,28 +14,28 @@ export function AlarmStatus({ state, countdown }: AlarmStatusProps) {
   const config = {
     standby: {
       icon: Shield,
-      text: "System Standby",
+      text: "Sistem Beklemede",
       color: "text-muted-foreground",
       bg: "bg-muted/10",
       border: "border-muted/20",
     },
     active: {
       icon: CheckCircle2,
-      text: "Protection Active",
+      text: "Koruma Aktif",
       color: "text-primary",
       bg: "bg-primary/10",
       border: "border-primary/20",
     },
     countdown: {
       icon: Radio,
-      text: `Wake Up Verification - ${countdown}s`,
+      text: `Uyanma Doğrulaması - ${countdown}s`,
       color: "text-accent animate-pulse",
       bg: "bg-accent/10",
       border: "border-accent/40",
     },
     triggering: {
       icon: PhoneCall,
-      text: "Emergency Call Triggered",
+      text: "Acil Durum Araması Başlatıldı",
       color: "text-destructive animate-bounce",
       bg: "bg-destructive/10",
       border: "border-destructive/40",

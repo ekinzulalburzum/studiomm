@@ -1,28 +1,24 @@
 'use server';
 /**
- * @fileOverview This file implements a Genkit flow for generating a personalized emergency call message.
- *
- * - generateEmergencyCallMessage - A function that generates a customized script for an automated emergency call.
- * - GenerateEmergencyCallMessageInput - The input type for the generateEmergencyCallMessage function.
- * - GenerateEmergencyCallMessageOutput - The return type for the generateEmergencyCallMessage function.
+ * @fileOverview Bu dosya, kişiselleştirilmiş bir acil durum çağrı mesajı oluşturmak için bir Genkit akışı uygular.
  */
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const GenerateEmergencyCallMessageInputSchema = z.object({
-  userName: z.string().describe('The name of the user who missed their alarm.'),
-  emergencyContactName: z.string().describe('The name of the emergency contact to be called.'),
-  timeMissed: z.string().describe('The approximate time the alarm was missed (e.g., "7:05 AM").'),
+  userName: z.string().describe('Alarmı kaçıran kullanıcının adı.'),
+  emergencyContactName: z.string().describe('Aranacak acil durum kişisinin adı.'),
+  timeMissed: z.string().describe('Alarmın kaçırıldığı yaklaşık zaman (örn. "07:05").'),
   customMessage:
-    z.string().optional().describe('An optional custom message from the user to include in the alert.'),
+    z.string().optional().describe('Kullanıcının uyarıya eklemek istediği isteğe bağlı özel mesaj.'),
 });
 export type GenerateEmergencyCallMessageInput = z.infer<
   typeof GenerateEmergencyCallMessageInputSchema
 >;
 
 const GenerateEmergencyCallMessageOutputSchema = z.object({
-  message: z.string().describe('The generated speech script for the automated emergency call.'),
+  message: z.string().describe('Otomatik acil durum araması için oluşturulan konuşma metni.'),
 });
 export type GenerateEmergencyCallMessageOutput = z.infer<
   typeof GenerateEmergencyCallMessageOutputSchema
@@ -38,20 +34,19 @@ const generateEmergencyCallMessagePrompt = ai.definePrompt({
   name: 'generateEmergencyCallMessagePrompt',
   input: {schema: GenerateEmergencyCallMessageInputSchema},
   output: {schema: GenerateEmergencyCallMessageOutputSchema},
-  prompt: `You are an AI assistant tasked with generating a clear and concise message for an automated phone call to an emergency contact. The call is being made because the user, {{{userName}}}, has missed their alarm.
+  prompt: `Sen, otomatik bir telefon araması için net ve kısa bir mesaj oluşturmakla görevli bir yapay zeka asistanısın. Bu arama, kullanıcı {{{userName}}} alarmını kaçırdığı için acil durum kişisine yapılmaktadır.
 
-The recipient of this call is {{{emergencyContactName}}}.
+Alıcı: {{{emergencyContactName}}}.
+Alarmın kaçırılma saati: yaklaşık {{{timeMissed}}}.
 
-The alarm was missed at approximately {{{timeMissed}}}.
-
-If the user provided a custom message, include it in a helpful way:
+Eğer kullanıcı özel bir mesaj bıraktıysa, bunu yardımcı bir şekilde ekle:
 {{#if customMessage}}
-Custom message from {{{userName}}}: "{{{customMessage}}}"
+{{{userName}}} tarafından bırakılan not: "{{{customMessage}}}"
 {{/if}}
 
-Please generate a short, polite, and informative speech script for {{{emergencyContactName}}} to let them know that {{{userName}}} missed their alarm and that this is an automated alert from GuardianWake. Advise them to try and contact {{{userName}}}.
+Lütfen {{{emergencyContactName}}} için kısa, nazik ve bilgilendirici bir konuşma metni oluştur. {{{userName}}} isimli kişinin alarmını kaçırdığını ve kendisine ulaşamadığımızı, bu aramanın VefaAlarm sisteminden gelen otomatik bir uyarı olduğunu belirt. Onu kontrol etmesini tavsiye et.
 
-The message should be in a single paragraph, starting with "Hello {{emergencyContactName}}, ".`,
+Mesaj tek bir paragraf olmalı ve "Merhaba {{emergencyContactName}}, " ile başlamalıdır.`,
 });
 
 const generateEmergencyCallMessageFlow = ai.defineFlow(
@@ -63,7 +58,7 @@ const generateEmergencyCallMessageFlow = ai.defineFlow(
   async input => {
     const {output} = await generateEmergencyCallMessagePrompt(input);
     if (!output) {
-      throw new Error('Failed to generate emergency call message.');
+      throw new Error('Acil durum mesajı oluşturulamadı.');
     }
     return output;
   }

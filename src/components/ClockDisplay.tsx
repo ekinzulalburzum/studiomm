@@ -32,7 +32,7 @@ export function ClockDisplay() {
         </div>
       </div>
       <div className="text-sm md:text-base font-medium text-muted-foreground tracking-widest uppercase">
-        {time.toLocaleDateString(undefined, {
+        {time.toLocaleDateString('tr-TR', {
           weekday: "long",
           month: "long",
           day: "numeric",
