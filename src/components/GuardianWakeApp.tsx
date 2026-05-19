@@ -139,40 +139,42 @@ export function GuardianWakeApp() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground selection:bg-primary/20">
+    <div className="min-h-screen flex flex-col bg-background text-foreground selection:bg-primary/20 overflow-x-hidden">
       <audio ref={audioRef} hidden />
       
-      <header className="container mx-auto py-8 px-6 flex items-center justify-between border-b border-white/5">
+      <header className="container mx-auto py-6 md:py-8 px-4 md:px-6 flex items-center justify-between border-b border-white/5 sticky top-0 bg-background/80 backdrop-blur-lg z-40">
         <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-background shadow-lg shadow-primary/20">
-            <Shield className="w-6 h-6" />
+          <div className="w-9 h-9 md:w-10 md:h-10 bg-primary rounded-xl flex items-center justify-center text-background shadow-lg shadow-primary/20">
+            <Shield className="w-5 h-5 md:w-6 md:h-6" />
           </div>
-          <h1 className="text-2xl font-black tracking-tighter">VIGIL</h1>
+          <h1 className="text-xl md:text-2xl font-black tracking-tighter">VIGIL</h1>
         </div>
         <AlarmStatus state={systemState} countdown={countdown} />
       </header>
 
-      <main className="container mx-auto flex-1 flex flex-col items-center py-6 px-6 pb-20">
-        <div className="w-full max-w-2xl space-y-8">
+      <main className="container mx-auto flex-1 flex flex-col items-center py-6 px-4 md:px-6 pb-24">
+        <div className="w-full max-w-xl space-y-8">
           <ClockDisplay isActive={systemState === 'active'} />
           
           {systemState === 'countdown' && (
-            <div className="flex flex-col items-center space-y-8 animate-in fade-in zoom-in duration-700 bg-primary/5 p-12 rounded-[3rem] border border-primary/10">
+            <div className="flex flex-col items-center space-y-8 animate-in fade-in zoom-in duration-700 bg-primary/5 p-8 md:p-12 rounded-[2.5rem] md:rounded-[3rem] border border-primary/10">
               <div className="flex items-center gap-3 text-primary animate-pulse">
-                <Bell className="w-6 h-6" />
-                <span className="text-lg font-bold uppercase tracking-[0.2em]">DOĞRULAMA BEKLENİYOR</span>
+                <Bell className="w-5 h-5 md:w-6 md:h-6" />
+                <span className="text-sm md:text-lg font-bold uppercase tracking-[0.2em]">DOĞRULAMA BEKLENİYOR</span>
               </div>
               <button
                 onClick={handleDismiss}
-                className="w-64 h-64 rounded-full bg-primary text-background text-3xl font-black shadow-[0_0_50px_rgba(var(--primary),0.3)] hover:scale-105 active:scale-95 transition-all flex flex-col items-center justify-center border-4 border-white/10"
+                className="w-56 h-56 md:w-64 md:h-64 rounded-full bg-primary text-background text-2xl md:text-3xl font-black shadow-[0_0_40px_rgba(var(--primary),0.2)] hover:scale-105 active:scale-95 transition-all flex flex-col items-center justify-center border-4 border-white/10"
               >
                 GÜVENDENİM
-                <span className="text-xs font-bold opacity-60 mt-2 tracking-widest uppercase">Durdurmak İçin Bas</span>
+                <span className="text-[10px] font-bold opacity-60 mt-2 tracking-widest uppercase">Durdurmak İçin Bas</span>
               </button>
             </div>
           )}
 
-          <div className="bg-card border border-white/5 rounded-[2.5rem] p-8 space-y-10 shadow-2xl">
+          <div className="bg-card border border-white/5 rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-8 space-y-10 shadow-2xl relative overflow-hidden">
+             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-[80px] rounded-full -mr-16 -mt-16 pointer-events-none" />
+            
             <AlarmScheduler 
               activeAlarm={alarmTime} 
               activeDays={alarmDays}
@@ -192,11 +194,11 @@ export function GuardianWakeApp() {
 
           {systemState === 'active' && alarmTime && (
             <div className="flex flex-col items-center gap-4 py-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-              <div className="flex items-center gap-3 bg-primary/10 px-8 py-3 rounded-2xl border border-primary/20">
+              <div className="flex items-center gap-3 bg-primary/10 px-8 py-3 rounded-2xl border border-primary/20 shadow-lg shadow-primary/5">
                 <Bell className="w-5 h-5 text-primary" />
-                <span className="text-2xl font-black text-primary tabular-nums">{alarmTime}</span>
+                <span className="text-2xl md:text-3xl font-black text-primary tabular-nums">{alarmTime}</span>
               </div>
-              <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-muted-foreground">Aktif Koruma Periyodu</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-muted-foreground opacity-60">Aktif Koruma Periyodu</span>
             </div>
           )}
         </div>

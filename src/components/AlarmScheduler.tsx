@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const DAYS = [
@@ -34,34 +33,36 @@ export function AlarmScheduler({ onSetAlarm, activeAlarm, activeDays, onClearAla
   };
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col items-center space-y-6">
-        <Label className="text-[10px] text-muted-foreground uppercase tracking-[0.3em] font-black opacity-50">
+    <div className="space-y-10 w-full max-w-md mx-auto">
+      <div className="flex flex-col items-center space-y-6 w-full">
+        <Label className="text-[10px] text-muted-foreground uppercase tracking-[0.4em] font-black opacity-60">
           Uyanış Zamanı
         </Label>
         
-        <div className="relative group w-full max-w-xs">
-          <div className="absolute inset-0 bg-primary/5 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-          <input
-            type="time"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-            className="relative w-full bg-black/40 border border-white/5 text-6xl font-black h-32 rounded-[2rem] text-center focus:outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/10 transition-all cursor-pointer appearance-none selection:bg-primary/20"
-          />
-          <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-primary/20 text-primary text-[10px] px-3 py-1 rounded-full font-black tracking-widest border border-primary/30">
-            DİJİTAL SAAT
+        <div className="relative group w-full flex justify-center">
+          <div className="absolute inset-0 bg-primary/5 blur-3xl rounded-full opacity-50 pointer-events-none" />
+          <div className="relative w-full max-w-[280px]">
+            <input
+              type="time"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+              className="w-full bg-black/40 border border-white/5 text-5xl md:text-6xl font-black h-28 md:h-32 rounded-[2rem] text-center focus:outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/10 transition-all cursor-pointer appearance-none selection:bg-primary/20"
+            />
+            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-primary/20 text-primary text-[9px] px-4 py-1.5 rounded-full font-black tracking-widest border border-primary/30 whitespace-nowrap">
+              DİJİTAL SAAT AYARI
+            </div>
           </div>
         </div>
       </div>
 
       <div className="space-y-4">
-        <div className="flex justify-center gap-2">
+        <div className="flex flex-wrap justify-center gap-2">
           {DAYS.map((day) => (
             <button
               key={day.value}
               onClick={() => toggleDay(day.value)}
               className={cn(
-                "w-12 h-12 rounded-2xl text-[10px] font-black transition-all border-2",
+                "w-11 h-11 md:w-12 md:h-12 rounded-2xl text-[10px] font-black transition-all border-2",
                 selectedDays.includes(day.value)
                   ? "bg-primary text-background border-primary shadow-lg shadow-primary/20"
                   : "bg-white/5 text-muted-foreground border-transparent hover:bg-white/10"
@@ -76,7 +77,7 @@ export function AlarmScheduler({ onSetAlarm, activeAlarm, activeDays, onClearAla
       <div className="flex flex-col gap-4">
         <Button 
           onClick={() => onSetAlarm(time, selectedDays)}
-          className="w-full h-16 rounded-[1.5rem] font-black text-xl bg-primary hover:bg-primary/90 text-background shadow-xl shadow-primary/20 transition-transform active:scale-[0.98]"
+          className="w-full h-16 rounded-[1.8rem] font-black text-lg bg-primary hover:bg-primary/90 text-background shadow-xl shadow-primary/20 transition-transform active:scale-[0.98]"
         >
           {activeAlarm ? "PROGRAMI GÜNCELLE" : "KORUMAYI BAŞLAT"}
         </Button>
