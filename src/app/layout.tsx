@@ -2,8 +2,8 @@ import type {Metadata} from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'VefaAlarm - Akıllı Güvenlik Alarmı',
-  description: 'Uyanmadığınızda sevdiklerinize haber veren yapay zeka destekli alarm sistemi.',
+  title: 'CanEmanet - Akıllı Güvenlik Alarmı',
+  description: 'Uyanmadığınızda sevdiklerinize haber veren yapay zeka destekli akıllı yaşam koruyucusu.',
 };
 
 export default function RootLayout({

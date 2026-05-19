@@ -8,7 +8,14 @@ import { BackupContact, ContactInfo } from "./BackupContact";
 import { TriggerOverlay } from "./TriggerOverlay";
 import { generateEmergencyCallMessage } from "@/ai/flows/generate-emergency-call-message";
 import { useToast } from "@/hooks/use-toast";
-import { BellRing, Shield, Info } from "lucide-react";
+import { BellRing, Shield, Info, Music } from "lucide-react";
+
+const ALARM_SOUNDS = [
+  "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+  "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+  "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+  "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3"
+];
 
 export function GuardianWakeApp() {
   const { toast } = useToast();
@@ -22,9 +29,11 @@ export function GuardianWakeApp() {
   const [countdown, setCountdown] = useState(300); // 5 minutes in seconds
   const [aiMessage, setAiMessage] = useState("");
   const [isCalling, setIsCalling] = useState(false);
+  const [currentSound, setCurrentSound] = useState("");
 
   const countdownInterval = useRef<NodeJS.Timeout | null>(null);
   const alarmCheckInterval = useRef<NodeJS.Timeout | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     alarmCheckInterval.current = setInterval(() => {
@@ -42,6 +51,26 @@ export function GuardianWakeApp() {
       if (alarmCheckInterval.current) clearInterval(alarmCheckInterval.current);
     };
   }, [systemState, alarmTime]);
+
+  // Audio effect
+  useEffect(() => {
+    if (systemState === "countdown") {
+      const randomIdx = Math.floor(Math.random() * ALARM_SOUNDS.length);
+      const soundUrl = ALARM_SOUNDS[randomIdx];
+      setCurrentSound(soundUrl);
+      
+      if (audioRef.current) {
+        audioRef.current.src = soundUrl;
+        audioRef.current.loop = true;
+        audioRef.current.play().catch(e => console.log("Audio play blocked", e));
+      }
+    } else {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+    }
+  }, [systemState]);
 
   const triggerGracePeriod = () => {
     setSystemState("countdown");
@@ -70,7 +99,7 @@ export function GuardianWakeApp() {
     
     try {
       const result = await generateEmergencyCallMessage({
-        userName: "VefaAlarm Kullanıcısı",
+        userName: "CanEmanet Kullanıcısı",
         emergencyContactName: contact.name,
         timeMissed: alarmTime || "Yeni",
         customMessage: contact.customMessage
@@ -89,7 +118,7 @@ export function GuardianWakeApp() {
     setIsCalling(false);
     toast({
       title: "Yanıt Doğrulandı",
-      description: "VefaAlarm koruması aktif kalmaya devam ediyor.",
+      description: "CanEmanet koruması aktif kalmaya devam ediyor.",
     });
   };
 
@@ -108,6 +137,8 @@ export function GuardianWakeApp() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-between py-12 px-6 relative overflow-hidden">
+      <audio ref={audioRef} hidden />
+      
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px] animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-accent/10 rounded-full blur-[100px] animate-pulse-glow" />
@@ -120,7 +151,7 @@ export function GuardianWakeApp() {
           </div>
           <div className="flex flex-col">
             <h1 className="text-3xl font-bold tracking-tighter text-foreground font-headline">
-              VEFA<span className="text-primary italic">ALARM</span>
+              CAN<span className="text-primary italic">EMANET</span>
             </h1>
             <p className="text-xs text-muted-foreground uppercase tracking-widest font-bold">Akıllı Yaşam Desteği</p>
           </div>
@@ -142,18 +173,15 @@ export function GuardianWakeApp() {
               {systemState === 'countdown' && (
                 <div className="animate-in fade-in slide-in-from-bottom-4 flex flex-col items-center space-y-6">
                   <div className="px-6 py-2 rounded-full border border-accent/40 bg-accent/10 text-accent font-bold text-sm tracking-widest uppercase flex items-center gap-2">
-                    <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
-                    </span>
-                    5 Dakikalık Yanıt Süresi
+                    <Music className="w-4 h-4 animate-bounce" />
+                    Rastgele Melodi Çalıyor
                   </div>
                   
                   <button
                     onClick={handleDismiss}
                     className="w-64 h-64 rounded-full bg-primary text-primary-foreground text-3xl font-black uppercase tracking-tighter shadow-[0_0_50px_rgba(130,120,242,0.6)] hover:scale-105 active:scale-95 transition-all flex items-center justify-center text-center px-4 leading-none"
                   >
-                    UYANDIM
+                    BURADAYIM
                   </button>
                 </div>
               )}
@@ -185,7 +213,7 @@ export function GuardianWakeApp() {
           <div className="p-4 bg-muted/10 border border-white/5 rounded-xl flex items-start gap-3">
             <Info className="w-5 h-5 text-accent mt-0.5 shrink-0" />
             <p className="text-xs text-muted-foreground leading-relaxed">
-              <strong>VefaAlarm Mantığı:</strong> Eğer alarmınızı 5 dakika içinde kapatmazsanız, {contact.name || 'koruyucunuza'} yapay zeka tarafından oluşturulan bir acil durum araması yapılacaktır.
+              <strong>CanEmanet Mantığı:</strong> Eğer alarmınızı 5 dakika içinde kapatmazsanız, {contact.name || 'koruyucunuza'} yapay zeka tarafından oluşturulan bir acil durum araması yapılacaktır.
             </p>
           </div>
         </div>
@@ -201,8 +229,8 @@ export function GuardianWakeApp() {
       )}
 
       <footer className="z-10 w-full max-w-5xl flex justify-between items-center text-[10px] text-muted-foreground uppercase tracking-[0.2em] pt-8 border-t border-white/5">
-        <span>© 2024 VefaAlarm Sistemleri</span>
-        <span>Güvenli Telefon Hattı • AI-09X</span>
+        <span>© 2024 CanEmanet Güvenlik Teknolojileri</span>
+        <span>Güvenli Telefon Hattı • AI-12G</span>
       </footer>
     </div>
   );
