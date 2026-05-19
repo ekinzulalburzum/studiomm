@@ -8,13 +8,16 @@ import { BackupContact, ContactInfo } from "./BackupContact";
 import { TriggerOverlay } from "./TriggerOverlay";
 import { generateEmergencyCallMessage } from "@/ai/flows/generate-emergency-call-message";
 import { useToast } from "@/hooks/use-toast";
-import { BellRing, Shield, Info, Music } from "lucide-react";
+import { BellRing, Shield, Info, Music } from "lucide-center";
+import { LucideIcon, BellRing as BellRingIcon, Shield as ShieldIcon, Info as InfoIcon, Music as MusicIcon } from "lucide-react";
 
+// Lucide icons work correctly, I'll use direct imports to be safe
 const ALARM_SOUNDS = [
   "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
   "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
   "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
-  "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3"
+  "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+  "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3"
 ];
 
 export function GuardianWakeApp() {
@@ -22,7 +25,7 @@ export function GuardianWakeApp() {
   const [systemState, setSystemState] = useState<SystemState>("standby");
   const [alarmTime, setAlarmTime] = useState<string | null>(null);
   const [contact, setContact] = useState<ContactInfo>({
-    name: "Acil Durum Koruyucusu",
+    name: "Acil Durum Kişisi",
     phone: "",
     customMessage: "",
   });
@@ -52,7 +55,7 @@ export function GuardianWakeApp() {
     };
   }, [systemState, alarmTime]);
 
-  // Audio effect
+  // Random Audio effect
   useEffect(() => {
     if (systemState === "countdown") {
       const randomIdx = Math.floor(Math.random() * ALARM_SOUNDS.length);
@@ -99,14 +102,13 @@ export function GuardianWakeApp() {
     
     try {
       const result = await generateEmergencyCallMessage({
-        userName: "CanEmanet Kullanıcısı",
+        userName: "HayatAlarmı Kullanıcısı",
         emergencyContactName: contact.name,
-        timeMissed: alarmTime || "Yeni",
+        timeMissed: alarmTime || "Belirtilmedi",
         customMessage: contact.customMessage
       });
       setAiMessage(result.message);
     } catch (error) {
-      console.error("AI Generation failed", error);
       setAiMessage(`Merhaba ${contact.name}, bu otomatik bir uyarıdır. Yakınınız ${alarmTime} saatindeki alarmını kaçırdı ve yanıt vermedi. Lütfen kendisini kontrol edin.`);
     }
   };
@@ -118,7 +120,7 @@ export function GuardianWakeApp() {
     setIsCalling(false);
     toast({
       title: "Yanıt Doğrulandı",
-      description: "CanEmanet koruması aktif kalmaya devam ediyor.",
+      description: "HayatAlarmı koruması aktif kalmaya devam ediyor.",
     });
   };
 
@@ -126,7 +128,7 @@ export function GuardianWakeApp() {
     if (!contact.phone) {
       toast({
         title: "Yapılandırma Gerekli",
-        description: "Alarmı etkinleştirmeden önce bir yedek kişi ayarlayın.",
+        description: "Alarmı etkinleştirmeden önce bir acil durum kişisi ayarlayın.",
         variant: "destructive",
       });
       return;
@@ -147,13 +149,13 @@ export function GuardianWakeApp() {
       <header className="z-10 w-full max-w-5xl flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-center gap-3 group">
           <div className="p-3 rounded-2xl bg-primary/20 group-hover:bg-primary/30 transition-colors neon-border">
-            <Shield className="w-8 h-8 text-primary neon-text-primary" />
+            <ShieldIcon className="w-8 h-8 text-primary neon-text-primary" />
           </div>
           <div className="flex flex-col">
             <h1 className="text-3xl font-bold tracking-tighter text-foreground font-headline">
-              CAN<span className="text-primary italic">EMANET</span>
+              HAYAT<span className="text-primary italic">ALARMI</span>
             </h1>
-            <p className="text-xs text-muted-foreground uppercase tracking-widest font-bold">Akıllı Yaşam Desteği</p>
+            <p className="text-xs text-muted-foreground uppercase tracking-widest font-bold">Kesintisiz Güvenlik</p>
           </div>
         </div>
 
@@ -173,7 +175,7 @@ export function GuardianWakeApp() {
               {systemState === 'countdown' && (
                 <div className="animate-in fade-in slide-in-from-bottom-4 flex flex-col items-center space-y-6">
                   <div className="px-6 py-2 rounded-full border border-accent/40 bg-accent/10 text-accent font-bold text-sm tracking-widest uppercase flex items-center gap-2">
-                    <Music className="w-4 h-4 animate-bounce" />
+                    <MusicIcon className="w-4 h-4 animate-bounce" />
                     Rastgele Melodi Çalıyor
                   </div>
                   
@@ -188,7 +190,7 @@ export function GuardianWakeApp() {
 
               {systemState === 'active' && (
                 <div className="flex flex-col items-center space-y-2 opacity-50">
-                  <BellRing className="w-8 h-8 animate-pulse text-primary" />
+                  <BellRingIcon className="w-8 h-8 animate-pulse text-primary" />
                   <p className="text-sm font-bold uppercase tracking-widest">Planlı alarm bekleniyor</p>
                 </div>
               )}
@@ -211,9 +213,9 @@ export function GuardianWakeApp() {
           />
           
           <div className="p-4 bg-muted/10 border border-white/5 rounded-xl flex items-start gap-3">
-            <Info className="w-5 h-5 text-accent mt-0.5 shrink-0" />
+            <InfoIcon className="w-5 h-5 text-accent mt-0.5 shrink-0" />
             <p className="text-xs text-muted-foreground leading-relaxed">
-              <strong>CanEmanet Mantığı:</strong> Eğer alarmınızı 5 dakika içinde kapatmazsanız, {contact.name || 'koruyucunuza'} yapay zeka tarafından oluşturulan bir acil durum araması yapılacaktır.
+              <strong>Nasıl Çalışır?</strong> Eğer alarmınızı 5 dakika içinde kapatmazsanız, {contact.name || 'belirlediğiniz kişiye'} yapay zeka tarafından hazırlanan bir acil durum uyarısı iletilecektir.
             </p>
           </div>
         </div>
@@ -229,8 +231,8 @@ export function GuardianWakeApp() {
       )}
 
       <footer className="z-10 w-full max-w-5xl flex justify-between items-center text-[10px] text-muted-foreground uppercase tracking-[0.2em] pt-8 border-t border-white/5">
-        <span>© 2024 CanEmanet Güvenlik Teknolojileri</span>
-        <span>Güvenli Telefon Hattı • AI-12G</span>
+        <span>© 2024 HayatAlarmı Güvenlik Sistemleri</span>
+        <span>Yapay Zeka Destekli Koruma</span>
       </footer>
     </div>
   );

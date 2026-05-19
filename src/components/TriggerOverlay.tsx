@@ -24,34 +24,34 @@ export function TriggerOverlay({ onDismiss, message, isCalling, contactName }: T
             <AlertCircle className="w-10 h-10 text-destructive" />
           </div>
           <div className="space-y-1">
-            <h2 className="text-3xl font-bold tracking-tight text-destructive">CAN GÜVENLİĞİ UYARISI</h2>
-            <p className="text-muted-foreground">Yanıt süresi doldu, sevdikleriniz bilgilendiriliyor.</p>
+            <h2 className="text-3xl font-bold tracking-tight text-destructive">GÜVENLİK UYARISI AKTİF</h2>
+            <p className="text-muted-foreground">Yanıt süresi doldu, HayatAlarmı sevdiklerinizi bilgilendiriyor.</p>
           </div>
         </div>
 
         <div className="p-8 space-y-8">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Telefon Hattı Durumu</h3>
+              <h3 className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Sistem Durumu</h3>
               <div className="flex items-center gap-2">
                 <span className="relative flex h-3 w-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-destructive opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-3 w-3 bg-destructive"></span>
                 </span>
-                <span className="text-sm font-bold text-destructive uppercase">Arama Aktif</span>
+                <span className="text-sm font-bold text-destructive uppercase">Bilgilendirme Yapılıyor</span>
               </div>
             </div>
 
             <div className="bg-background/50 rounded-xl p-6 border border-white/5 space-y-4">
               <div className="flex items-center gap-3">
                 <Phone className="w-5 h-5 text-accent" />
-                <p className="font-bold">{contactName} aranıyor...</p>
+                <p className="font-bold">{contactName} için mesaj oluşturuluyor...</p>
               </div>
               
               <div className="space-y-2">
                 <p className="text-xs text-muted-foreground uppercase tracking-widest font-bold">Yapay Zeka Sesli Mesajı</p>
                 <div className="p-4 bg-muted/30 rounded-lg italic text-sm border-l-2 border-accent">
-                  {message || "CanEmanet uyarı mesajı oluşturuluyor..."}
+                  {message || "HayatAlarmı uyarı mesajı hazırlanıyor..."}
                 </div>
               </div>
             </div>
@@ -67,7 +67,7 @@ export function TriggerOverlay({ onDismiss, message, isCalling, contactName }: T
               BURADAYIM, GÜVENDEYİM
             </Button>
             <p className="text-center text-xs text-muted-foreground">
-              Butona basmak acil durum aramasını sonlandıracak ve sevdiklerinize güvende olduğunuzu bildirecektir.
+              Butona basmak acil durum uyarısını durduracak ve güvende olduğunuzu sisteme bildirecektir.
             </p>
           </div>
         </div>

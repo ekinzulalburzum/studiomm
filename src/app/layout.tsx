@@ -2,7 +2,7 @@ import type {Metadata} from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'CanEmanet - Akıllı Güvenlik Alarmı',
+  title: 'HayatAlarmı - Akıllı Güvenlik Sistemi',
   description: 'Uyanmadığınızda sevdiklerinize haber veren yapay zeka destekli akıllı yaşam koruyucusu.',
 };
 
