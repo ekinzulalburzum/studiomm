@@ -8,7 +8,7 @@ import {BackupContact, ContactInfo} from './BackupContact';
 import {TriggerOverlay} from './TriggerOverlay';
 import {generateEmergencyCallMessage} from '@/ai/flows/generate-emergency-call-message';
 import {useToast} from '@/hooks/use-toast';
-import {Shield, Bell} from 'lucide-react';
+import {Bell} from 'lucide-react';
 
 const ALARM_SOUNDS = [
   "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
@@ -142,13 +142,7 @@ export function GuardianWakeApp() {
     <div className="min-h-screen flex flex-col bg-background text-foreground selection:bg-primary/20 overflow-x-hidden">
       <audio ref={audioRef} hidden />
       
-      <header className="container mx-auto py-6 md:py-8 px-4 md:px-6 flex items-center justify-between border-b border-white/5 sticky top-0 bg-background/80 backdrop-blur-lg z-40">
-        <div className="flex items-center gap-2">
-          <div className="w-9 h-9 md:w-10 md:h-10 bg-primary rounded-xl flex items-center justify-center text-background shadow-lg shadow-primary/20">
-            <Shield className="w-5 h-5 md:w-6 md:h-6" />
-          </div>
-          <h1 className="text-xl md:text-2xl font-black tracking-tighter">VIGIL</h1>
-        </div>
+      <header className="container mx-auto py-6 md:py-8 px-4 md:px-6 flex items-center justify-end sticky top-0 bg-background/80 backdrop-blur-lg z-40 border-b border-white/5">
         <AlarmStatus state={systemState} countdown={countdown} />
       </header>
 
