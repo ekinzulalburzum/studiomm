@@ -39,18 +39,25 @@ export function BackupContact({ contact, onUpdate }: BackupContactProps) {
     });
   };
 
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Sadece rakam ve + işaretine izin ver, maksimum 15 karakter
+    const cleaned = value.replace(/[^0-9+]/g, "").slice(0, 15);
+    setFormData({ ...formData, phone: cleaned });
+  };
+
   return (
-    <Card className="bg-card/50 border-white/5 backdrop-blur-md overflow-hidden neon-border">
-      <CardHeader>
+    <Card className="bg-white border-black/5 shadow-sm rounded-2xl overflow-hidden">
+      <CardHeader className="pb-2">
         <div className="flex items-center gap-2">
-          <ShieldCheck className="w-5 h-5 text-accent" />
+          <ShieldCheck className="w-5 h-5 text-primary" />
           <CardTitle className="text-lg font-bold">Acil Durum Koruyucusu</CardTitle>
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-3">
           <div className="grid gap-2">
-            <Label htmlFor="contact-name" className="text-xs text-muted-foreground uppercase tracking-widest flex items-center gap-2">
+            <Label htmlFor="contact-name" className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold flex items-center gap-2">
               <User className="w-3 h-3" /> Koruyucu Adı
             </Label>
             <Input
@@ -58,26 +65,27 @@ export function BackupContact({ contact, onUpdate }: BackupContactProps) {
               placeholder="örn. Ahmet Yılmaz"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="bg-background/50 border-white/10"
+              className="bg-muted/30 border-border h-11 rounded-xl"
             />
           </div>
           
           <div className="grid gap-2">
-            <Label htmlFor="contact-phone" className="text-xs text-muted-foreground uppercase tracking-widest flex items-center gap-2">
+            <Label htmlFor="contact-phone" className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold flex items-center gap-2">
               <Phone className="w-3 h-3" /> Telefon Numarası
             </Label>
             <Input
               id="contact-phone"
               type="tel"
-              placeholder="+90 (555) 000 00 00"
+              placeholder="+905550000000"
               value={formData.phone}
-              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              className="bg-background/50 border-white/10"
+              onChange={handlePhoneChange}
+              maxLength={15}
+              className="bg-muted/30 border-border h-11 rounded-xl"
             />
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="custom-msg" className="text-xs text-muted-foreground uppercase tracking-widest flex items-center gap-2">
+            <Label htmlFor="custom-msg" className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold flex items-center gap-2">
               <MessageSquare className="w-3 h-3" /> Özel Uyarı Notu (İsteğe Bağlı)
             </Label>
             <Input
@@ -85,15 +93,14 @@ export function BackupContact({ contact, onUpdate }: BackupContactProps) {
               placeholder="Bugün uyanmakta zorluk çekiyorum..."
               value={formData.customMessage}
               onChange={(e) => setFormData({ ...formData, customMessage: e.target.value })}
-              className="bg-background/50 border-white/10"
+              className="bg-muted/30 border-border h-11 rounded-xl"
             />
           </div>
         </div>
 
         <Button 
           onClick={handleSave} 
-          variant="secondary" 
-          className="w-full bg-accent/20 hover:bg-accent/30 text-accent border border-accent/30 font-bold"
+          className="w-full h-11 rounded-xl bg-primary hover:bg-primary/90 text-white font-bold shadow-sm"
         >
           Yapılandırmayı Kaydet
         </Button>
