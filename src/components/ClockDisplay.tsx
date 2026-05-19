@@ -4,11 +4,10 @@ import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 interface ClockDisplayProps {
-  onClick?: () => void;
   isActive?: boolean;
 }
 
-export function ClockDisplay({ onClick, isActive }: ClockDisplayProps) {
+export function ClockDisplay({ isActive }: ClockDisplayProps) {
   const [time, setTime] = useState<Date | null>(null);
 
   useEffect(() => {
@@ -19,7 +18,7 @@ export function ClockDisplay({ onClick, isActive }: ClockDisplayProps) {
     return () => clearInterval(interval);
   }, []);
 
-  if (!time) return <div className="h-32" />;
+  if (!time) return <div className="h-48" />;
 
   const hours = time.getHours().toString().padStart(2, "0");
   const minutes = time.getMinutes().toString().padStart(2, "0");
@@ -27,32 +26,34 @@ export function ClockDisplay({ onClick, isActive }: ClockDisplayProps) {
 
   return (
     <div 
-      onClick={onClick}
       className={cn(
-        "flex flex-col items-center justify-center space-y-2 p-12 select-none cursor-pointer group transition-all duration-500 rounded-3xl",
-        isActive ? "clock-card" : "hover:bg-white/5"
+        "flex flex-col items-center justify-center space-y-2 p-8 py-12 select-none transition-all duration-700 rounded-[3rem]",
+        isActive ? "clock-card scale-105" : "bg-white/[0.02]"
       )}
     >
       <div className="relative">
-        <div className="text-8xl md:text-[10rem] font-bold tracking-tighter neon-text-primary flex items-baseline leading-none">
-          <span className="group-hover:text-primary transition-colors">{hours}</span>
-          <span className="animate-pulse mx-1 opacity-40">:</span>
-          <span className="group-hover:text-primary transition-colors">{minutes}</span>
-          <span className="text-2xl md:text-4xl ml-4 opacity-40 font-medium tabular-nums">
+        <div className="text-[7rem] md:text-[10rem] font-black tracking-tighter neon-text-primary flex items-baseline leading-none text-white">
+          <span>{hours}</span>
+          <span className="animate-pulse mx-1 opacity-20">:</span>
+          <span>{minutes}</span>
+          <span className="text-3xl md:text-4xl ml-4 opacity-20 font-medium tabular-nums">
             {seconds}
           </span>
         </div>
       </div>
-      <div className="text-sm md:text-base font-bold text-muted-foreground tracking-[0.3em] uppercase opacity-60">
+      <div className="text-sm md:text-base font-bold text-muted-foreground tracking-[0.4em] uppercase opacity-40">
         {time.toLocaleDateString('tr-TR', {
           weekday: "long",
           month: "long",
           day: "numeric",
         })}
       </div>
-      <div className="mt-4 text-[10px] font-bold text-primary/50 uppercase tracking-widest animate-pulse opacity-0 group-hover:opacity-100 transition-opacity">
-        Alarm Kurmak İçin Dokun
-      </div>
+      {isActive && (
+        <div className="mt-4 flex items-center gap-2 px-4 py-1.5 bg-primary/10 rounded-full border border-primary/20">
+          <div className="w-1.5 h-1.5 rounded-full bg-primary animate-ping" />
+          <span className="text-[10px] font-black text-primary tracking-[0.2em] uppercase">SİSTEM NÖBETTE</span>
+        </div>
+      )}
     </div>
   );
 }
