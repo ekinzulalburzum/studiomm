@@ -1,6 +1,6 @@
 'use server';
 /**
- * @fileOverview Bu dosya, kişiselleştirilmiş bir acil durum çağrı mesajı oluşturmak için bir Genkit akışı uygular.
+ * @fileOverview Bu dosya, otomatik bir sesli arama için yapay zeka tarafından oluşturulan bir konuşma metni hazırlar.
  */
 
 import {ai} from '@/ai/genkit';
@@ -18,7 +18,7 @@ export type GenerateEmergencyCallMessageInput = z.infer<
 >;
 
 const GenerateEmergencyCallMessageOutputSchema = z.object({
-  message: z.string().describe('Otomatik acil durum araması için oluşturulan konuşma metni.'),
+  message: z.string().describe('Otomatik sesli arama sırasında asistanın okuyacağı konuşma metni.'),
 });
 export type GenerateEmergencyCallMessageOutput = z.infer<
   typeof GenerateEmergencyCallMessageOutputSchema
@@ -34,19 +34,23 @@ const generateEmergencyCallMessagePrompt = ai.definePrompt({
   name: 'generateEmergencyCallMessagePrompt',
   input: {schema: GenerateEmergencyCallMessageInputSchema},
   output: {schema: GenerateEmergencyCallMessageOutputSchema},
-  prompt: `Sen, otomatik bir telefon araması için net ve kısa bir mesaj oluşturmakla görevli bir yapay zeka asistanısın. Bu arama, kullanıcı {{{userName}}} alarmını kaçırdığı için acil durum kişisine yapılmaktadır.
+  prompt: `Sen, otomatik bir TELEFON ARAMASI için profesyonel bir konuşma metni oluşturan bir sesli asistansın. 
+Bu arama, kullanıcı {{{userName}}} sabah alarmına yanıt vermediği için yapılmaktadır.
 
 Alıcı: {{{emergencyContactName}}}.
-Alarmın kaçırılma saati: yaklaşık {{{timeMissed}}}.
+Olay: Kullanıcı sabah saat {{{timeMissed}}} civarındaki güvenli uyanış kontrolünü onaylamadı.
 
-Eğer kullanıcı özel bir mesaj bıraktıysa, bunu yardımcı bir şekilde ekle:
+Metin şu kurallara uymalıdır:
+1. "Merhaba {{{emergencyContactName}}}, ben VIGIL Akıllı Güvenlik Sistemi'nden otomatik bir sesli asistanım." cümlesiyle başla.
+2. {{{userName}}} isimli kullanıcının belirlenen saatte uyanmadığını ve sisteme yanıt vermediğini belirt.
+3. Çok nazik ama durumun ciddiyetini bildiren bir ton kullan.
+4. Kullanıcıyı kontrol etmesi için alıcıyı uyar.
 {{#if customMessage}}
-{{{userName}}} tarafından bırakılan not: "{{{customMessage}}}"
+5. Kullanıcının bıraktığı özel notu ekle: "{{{customMessage}}}"
 {{/if}}
+6. Metin kısa, anlaşılır ve bir telefon görüşmesine uygun olmalıdır.
 
-Lütfen {{{emergencyContactName}}} için kısa, nazik ve bilgilendirici bir konuşma metni oluştur. {{{userName}}} isimli kişinin alarmını kaçırdığını ve kendisine ulaşamadığımızı, bu aramanın VIGIL sisteminden gelen otomatik bir uyarı olduğunu belirt. Onu kontrol etmesini tavsiye et.
-
-Mesaj tek bir paragraf olmalı ve "Merhaba {{emergencyContactName}}, " ile başlamalıdır.`,
+Konuşma metnini tek bir paragraf olarak hazırla.`,
 });
 
 const generateEmergencyCallMessageFlow = ai.defineFlow(
@@ -58,7 +62,7 @@ const generateEmergencyCallMessageFlow = ai.defineFlow(
   async input => {
     const {output} = await generateEmergencyCallMessagePrompt(input);
     if (!output) {
-      throw new Error('Acil durum mesajı oluşturulamadı.');
+      throw new Error('Sesli arama metni oluşturulamadı.');
     }
     return output;
   }

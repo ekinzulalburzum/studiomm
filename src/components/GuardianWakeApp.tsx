@@ -1,16 +1,15 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useRef } from "react";
-import { ClockDisplay } from "./ClockDisplay";
-import { AlarmStatus, SystemState } from "./AlarmStatus";
-import { AlarmScheduler } from "./AlarmScheduler";
-import { BackupContact, ContactInfo } from "./BackupContact";
-import { TriggerOverlay } from "./TriggerOverlay";
-import { generateEmergencyCallMessage } from "@/ai/flows/generate-emergency-call-message";
-import { useToast } from "@/hooks/use-toast";
-import { Shield, Bell } from "lucide-react";
+import {useState, useEffect, useRef} from 'react';
+import {ClockDisplay} from './ClockDisplay';
+import {AlarmStatus, SystemState} from './AlarmStatus';
+import {AlarmScheduler} from './AlarmScheduler';
+import {BackupContact, ContactInfo} from './BackupContact';
+import {TriggerOverlay} from './TriggerOverlay';
+import {generateEmergencyCallMessage} from '@/ai/flows/generate-emergency-call-message';
+import {useToast} from '@/hooks/use-toast';
+import {Shield, Bell} from 'lucide-react';
 
-// Farklı tarzda alarm sesleri
 const ALARM_SOUNDS = [
   "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
   "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
@@ -21,7 +20,7 @@ const ALARM_SOUNDS = [
 ];
 
 export function GuardianWakeApp() {
-  const { toast } = useToast();
+  const {toast} = useToast();
   const [systemState, setSystemState] = useState<SystemState>("standby");
   const [alarmTime, setAlarmTime] = useState<string | null>(null);
   const [alarmDays, setAlarmDays] = useState<number[]>([]);
@@ -49,7 +48,7 @@ export function GuardianWakeApp() {
           alarmDays.includes(currentDay) &&
           now.getHours() === hours && 
           now.getMinutes() === minutes &&
-          now.getSeconds() < 15 // Sadece dakikanın başında kontrol et
+          now.getSeconds() < 15
         ) {
           triggerGracePeriod();
         }
@@ -67,19 +66,18 @@ export function GuardianWakeApp() {
     setSystemState("countdown");
     setCountdown(300);
     
-    // Her gün farklı müzik için bugünün tarihinden bir seed kullanıyoruz
     const today = new Date().getDate();
     const soundUrl = ALARM_SOUNDS[today % ALARM_SOUNDS.length];
     
     if (audioRef.current) {
       audioRef.current.src = soundUrl;
       audioRef.current.loop = true;
-      audioRef.current.play().catch(e => console.log("Ses çalma engellendi", e));
+      audioRef.current.play().catch(e => console.log("Ses engellendi", e));
     }
 
     toast({
-      title: "VIGIL Uyarı",
-      description: "Alarm vakti geldi. Güvende olduğunuzu onaylayın.",
+      title: "Uyanış Kontrolü",
+      description: "Lütfen 5 dakika içinde güvende olduğunuzu onaylayın.",
     });
 
     countdownInterval.current = setInterval(() => {
@@ -125,16 +123,8 @@ export function GuardianWakeApp() {
   const setAlarm = (time: string, days: number[]) => {
     if (!contact.phone) {
       toast({
-        title: "Kişi Gerekli",
-        description: "Lütfen önce bir koruyucu kişi ekleyin.",
-        variant: "destructive",
-      });
-      return;
-    }
-    if (days.length === 0) {
-      toast({
-        title: "Gün Seçilmedi",
-        description: "Lütfen alarm için en az bir gün seçin.",
+        title: "Numara Gerekli",
+        description: "Lütfen önce aranacak bir kişi ve numara belirleyin.",
         variant: "destructive",
       });
       return;
@@ -143,8 +133,8 @@ export function GuardianWakeApp() {
     setAlarmDays(days);
     setSystemState("active");
     toast({
-      title: "Sistem Kuruldu",
-      description: `Haftalık koruma ${time} için aktif hale getirildi.`,
+      title: "Nöbet Başladı",
+      description: `Belirlenen günlerde saat ${time} için koruma aktif.`,
     });
   };
 
@@ -170,21 +160,22 @@ export function GuardianWakeApp() {
             <div className="flex flex-col items-center space-y-8 animate-in fade-in zoom-in duration-500">
               <div className="flex items-center gap-2 text-primary animate-pulse">
                 <Bell className="w-5 h-5" />
-                <span className="text-sm font-bold uppercase tracking-widest">Alarm Çalıyor</span>
+                <span className="text-sm font-bold uppercase tracking-widest">Alarm Çalıyor - Onay Bekleniyor</span>
               </div>
               <button
                 onClick={handleDismiss}
-                className="w-56 h-56 rounded-full bg-primary text-white text-2xl font-bold shadow-2xl shadow-primary/40 hover:scale-105 active:scale-95 transition-all"
+                className="w-64 h-64 rounded-full bg-primary text-white text-2xl font-black shadow-2xl shadow-primary/40 hover:scale-105 active:scale-95 transition-all flex flex-col items-center justify-center border-8 border-white/20"
               >
                 GÜVENDENİM
+                <span className="text-xs font-normal opacity-70 mt-2">Aramayı İptal Et</span>
               </button>
             </div>
           )}
 
           {systemState === 'active' && (
-            <div className="flex items-center gap-2 opacity-40">
+            <div className="flex items-center gap-3 bg-muted/20 px-6 py-2 rounded-full border border-border/50">
               <Shield className="w-4 h-4 text-primary" />
-              <span className="text-[10px] font-bold uppercase tracking-widest">Nöbet Başladı</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">VIGIL Nöbette: Kesintisiz Koruma</span>
             </div>
           )}
         </div>
