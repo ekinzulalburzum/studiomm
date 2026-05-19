@@ -44,7 +44,7 @@ Eğer kullanıcı özel bir mesaj bıraktıysa, bunu yardımcı bir şekilde ekl
 {{{userName}}} tarafından bırakılan not: "{{{customMessage}}}"
 {{/if}}
 
-Lütfen {{{emergencyContactName}}} için kısa, nazik ve bilgilendirici bir konuşma metni oluştur. {{{userName}}} isimli kişinin alarmını kaçırdığını ve kendisine ulaşamadığımızı, bu aramanın HayatAlarmı sisteminden gelen otomatik bir uyarı olduğunu belirt. Onu kontrol etmesini tavsiye et.
+Lütfen {{{emergencyContactName}}} için kısa, nazik ve bilgilendirici bir konuşma metni oluştur. {{{userName}}} isimli kişinin alarmını kaçırdığını ve kendisine ulaşamadığımızı, bu aramanın VIGIL sisteminden gelen otomatik bir uyarı olduğunu belirt. Onu kontrol etmesini tavsiye et.
 
 Mesaj tek bir paragraf olmalı ve "Merhaba {{emergencyContactName}}, " ile başlamalıdır.`,
 });

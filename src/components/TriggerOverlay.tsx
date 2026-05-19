@@ -24,8 +24,8 @@ export function TriggerOverlay({ onDismiss, message, isCalling, contactName }: T
             <AlertCircle className="w-10 h-10 text-destructive" />
           </div>
           <div className="space-y-1">
-            <h2 className="text-3xl font-bold tracking-tight text-destructive">GÜVENLİK UYARISI AKTİF</h2>
-            <p className="text-muted-foreground">Yanıt süresi doldu, HayatAlarmı sevdiklerinizi bilgilendiriyor.</p>
+            <h2 className="text-3xl font-bold tracking-tight text-destructive uppercase">GÜVENLİK UYARISI AKTİF</h2>
+            <p className="text-muted-foreground">Yanıt süresi doldu, VIGIL sevdiklerinizi bilgilendiriyor.</p>
           </div>
         </div>
 
@@ -51,7 +51,7 @@ export function TriggerOverlay({ onDismiss, message, isCalling, contactName }: T
               <div className="space-y-2">
                 <p className="text-xs text-muted-foreground uppercase tracking-widest font-bold">Yapay Zeka Sesli Mesajı</p>
                 <div className="p-4 bg-muted/30 rounded-lg italic text-sm border-l-2 border-accent">
-                  {message || "HayatAlarmı uyarı mesajı hazırlanıyor..."}
+                  {message || "VIGIL uyarı mesajı hazırlanıyor..."}
                 </div>
               </div>
             </div>

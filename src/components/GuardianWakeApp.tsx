@@ -8,10 +8,13 @@ import { BackupContact, ContactInfo } from "./BackupContact";
 import { TriggerOverlay } from "./TriggerOverlay";
 import { generateEmergencyCallMessage } from "@/ai/flows/generate-emergency-call-message";
 import { useToast } from "@/hooks/use-toast";
-import { BellRing, Shield, Info, Music } from "lucide-center";
-import { LucideIcon, BellRing as BellRingIcon, Shield as ShieldIcon, Info as InfoIcon, Music as MusicIcon } from "lucide-react";
+import { 
+  BellRing as BellRingIcon, 
+  Shield as ShieldIcon, 
+  Info as InfoIcon, 
+  Music as MusicIcon 
+} from "lucide-react";
 
-// Lucide icons work correctly, I'll use direct imports to be safe
 const ALARM_SOUNDS = [
   "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
   "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
@@ -29,7 +32,7 @@ export function GuardianWakeApp() {
     phone: "",
     customMessage: "",
   });
-  const [countdown, setCountdown] = useState(300); // 5 minutes in seconds
+  const [countdown, setCountdown] = useState(300); // 5 dakika
   const [aiMessage, setAiMessage] = useState("");
   const [isCalling, setIsCalling] = useState(false);
   const [currentSound, setCurrentSound] = useState("");
@@ -55,7 +58,6 @@ export function GuardianWakeApp() {
     };
   }, [systemState, alarmTime]);
 
-  // Random Audio effect
   useEffect(() => {
     if (systemState === "countdown") {
       const randomIdx = Math.floor(Math.random() * ALARM_SOUNDS.length);
@@ -65,7 +67,7 @@ export function GuardianWakeApp() {
       if (audioRef.current) {
         audioRef.current.src = soundUrl;
         audioRef.current.loop = true;
-        audioRef.current.play().catch(e => console.log("Audio play blocked", e));
+        audioRef.current.play().catch(e => console.log("Ses çalma engellendi", e));
       }
     } else {
       if (audioRef.current) {
@@ -102,7 +104,7 @@ export function GuardianWakeApp() {
     
     try {
       const result = await generateEmergencyCallMessage({
-        userName: "HayatAlarmı Kullanıcısı",
+        userName: "VIGIL Kullanıcısı",
         emergencyContactName: contact.name,
         timeMissed: alarmTime || "Belirtilmedi",
         customMessage: contact.customMessage
@@ -120,7 +122,7 @@ export function GuardianWakeApp() {
     setIsCalling(false);
     toast({
       title: "Yanıt Doğrulandı",
-      description: "HayatAlarmı koruması aktif kalmaya devam ediyor.",
+      description: "VIGIL koruması aktif kalmaya devam ediyor.",
     });
   };
 
@@ -152,8 +154,8 @@ export function GuardianWakeApp() {
             <ShieldIcon className="w-8 h-8 text-primary neon-text-primary" />
           </div>
           <div className="flex flex-col">
-            <h1 className="text-3xl font-bold tracking-tighter text-foreground font-headline">
-              HAYAT<span className="text-primary italic">ALARMI</span>
+            <h1 className="text-3xl font-bold tracking-tighter text-foreground font-headline uppercase">
+              VI<span className="text-primary italic">GIL</span>
             </h1>
             <p className="text-xs text-muted-foreground uppercase tracking-widest font-bold">Kesintisiz Güvenlik</p>
           </div>
@@ -231,7 +233,7 @@ export function GuardianWakeApp() {
       )}
 
       <footer className="z-10 w-full max-w-5xl flex justify-between items-center text-[10px] text-muted-foreground uppercase tracking-[0.2em] pt-8 border-t border-white/5">
-        <span>© 2024 HayatAlarmı Güvenlik Sistemleri</span>
+        <span>© 2024 VIGIL Güvenlik Sistemleri</span>
         <span>Yapay Zeka Destekli Koruma</span>
       </footer>
     </div>
