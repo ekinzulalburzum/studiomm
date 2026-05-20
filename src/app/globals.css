@@ -37,11 +37,11 @@
 }
 
 .neon-text-primary {
-  text-shadow: 0 0 25px hsl(var(--primary) / 0.4);
+  text-shadow: 0 0 30px hsl(var(--primary) / 0.5);
 }
 
 .clock-card {
-  background: radial-gradient(circle at center, hsl(var(--primary) / 0.03) 0%, transparent 70%);
+  background: radial-gradient(circle at center, hsl(var(--primary) / 0.05) 0%, transparent 70%);
 }
 
 /* Chrome, Safari, Edge, Opera - Remove arrows from number/time inputs */
@@ -61,11 +61,16 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 /* Dynamic Themes */
-.theme-morning { background: linear-gradient(180deg, #1e3a8a 0%, #020617 100%); }
+.theme-morning { background: linear-gradient(180deg, #1e293b 0%, #020617 100%); }
 .theme-day { background: linear-gradient(180deg, #0f172a 0%, #020617 100%); }
-.theme-evening { background: linear-gradient(180deg, #451a03 0%, #020617 100%); }
+.theme-evening { background: linear-gradient(180deg, #1e1b4b 0%, #020617 100%); }
 .theme-night { background: linear-gradient(180deg, #000000 0%, #020617 100%); }
 
 .transition-bg {
-  transition: background 2s ease-in-out;
+  transition: background 3s ease-in-out;
+}
+
+/* Hide Turbopack or other overlays if possible */
+#__next-build-watcher, #__next-prerender-indicator {
+  display: none !important;
 }
