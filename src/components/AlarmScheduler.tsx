@@ -33,30 +33,30 @@ export function AlarmScheduler({ onSetAlarm, activeAlarm, activeDays, onClearAla
   };
 
   return (
-    <div className="space-y-10 w-full max-w-md mx-auto flex flex-col items-center">
+    <div className="space-y-10 w-full flex flex-col items-center justify-center">
       <div className="flex flex-col items-center space-y-6 w-full text-center">
-        <Label className="text-[10px] text-muted-foreground uppercase tracking-[0.4em] font-black opacity-60">
+        <Label className="text-[11px] text-primary/60 uppercase tracking-[0.5em] font-black">
           Uyanış Zamanı
         </Label>
         
-        <div className="relative group w-full flex justify-center">
-          <div className="absolute inset-0 bg-primary/5 blur-3xl rounded-full opacity-50 pointer-events-none" />
-          <div className="relative w-full max-w-[280px]">
+        <div className="relative w-full flex justify-center">
+          <div className="absolute inset-0 bg-primary/5 blur-3xl rounded-full opacity-30 pointer-events-none" />
+          <div className="relative w-full max-w-[280px] flex flex-col items-center">
             <input
               type="time"
               value={time}
               onChange={(e) => setTime(e.target.value)}
-              className="w-full bg-black/40 border border-white/5 text-5xl md:text-6xl font-black h-28 md:h-32 rounded-[2rem] text-center focus:outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/10 transition-all cursor-pointer appearance-none selection:bg-primary/20 [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-inner-spin-button]:hidden"
+              className="w-full bg-black/40 border border-white/5 text-6xl md:text-7xl font-black h-32 md:h-36 rounded-[2.5rem] text-center focus:outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/10 transition-all cursor-pointer appearance-none selection:bg-primary/20"
             />
-            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-primary/20 text-primary text-[9px] px-4 py-1.5 rounded-full font-black tracking-widest border border-primary/30 whitespace-nowrap">
+            <div className="mt-4 bg-primary/10 text-primary text-[10px] px-5 py-2 rounded-full font-black tracking-widest border border-primary/20">
               DİJİTAL SAAT AYARI
             </div>
           </div>
         </div>
       </div>
 
-      <div className="space-y-4 w-full">
-        <div className="flex flex-wrap justify-center gap-2">
+      <div className="space-y-4 w-full flex justify-center">
+        <div className="flex flex-wrap justify-center gap-2 max-w-sm">
           {DAYS.map((day) => (
             <button
               key={day.value}
@@ -74,10 +74,10 @@ export function AlarmScheduler({ onSetAlarm, activeAlarm, activeDays, onClearAla
         </div>
       </div>
       
-      <div className="flex flex-col gap-4 w-full">
+      <div className="flex flex-col gap-4 w-full max-w-xs">
         <Button 
           onClick={() => onSetAlarm(time, selectedDays)}
-          className="w-full h-16 rounded-[1.8rem] font-black text-lg bg-primary hover:bg-primary/90 text-background shadow-xl shadow-primary/20 transition-transform active:scale-[0.98]"
+          className="w-full h-16 rounded-[2rem] font-black text-lg bg-primary hover:bg-primary/90 text-background shadow-xl shadow-primary/20 transition-transform active:scale-[0.98]"
         >
           {activeAlarm ? "PROGRAMI GÜNCELLE" : "KORUMAYI BAŞLAT"}
         </Button>
@@ -85,7 +85,7 @@ export function AlarmScheduler({ onSetAlarm, activeAlarm, activeDays, onClearAla
           <Button 
             variant="ghost" 
             onClick={onClearAlarm}
-            className="w-full h-14 rounded-[1.5rem] font-bold text-destructive hover:bg-destructive/10"
+            className="w-full h-14 rounded-[1.8rem] font-bold text-destructive hover:bg-destructive/10"
           >
             SİSTEMİ DEVRE DIŞI BIRAK
           </Button>

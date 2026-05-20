@@ -18,7 +18,7 @@ export function ClockDisplay({ isActive }: ClockDisplayProps) {
     return () => clearInterval(interval);
   }, []);
 
-  if (!time) return <div className="h-40 md:h-48" />;
+  if (!time) return <div className="h-48 md:h-56" />;
 
   const hours = time.getHours().toString().padStart(2, "0");
   const minutes = time.getMinutes().toString().padStart(2, "0");
@@ -27,21 +27,21 @@ export function ClockDisplay({ isActive }: ClockDisplayProps) {
   return (
     <div 
       className={cn(
-        "flex flex-col items-center justify-center space-y-2 p-6 md:p-8 py-10 md:py-12 select-none transition-all duration-700 rounded-[2.5rem] md:rounded-[3rem] w-full",
-        isActive ? "clock-card scale-100 md:scale-105" : "bg-white/[0.02]"
+        "flex flex-col items-center justify-center space-y-4 p-8 md:p-12 select-none transition-all duration-700 rounded-[3.5rem] w-full",
+        isActive ? "clock-card scale-100 md:scale-105" : "bg-white/[0.01]"
       )}
     >
-      <div className="relative">
-        <div className="text-[5.5rem] sm:text-[7rem] md:text-[10rem] font-black tracking-tighter neon-text-primary flex items-baseline leading-none text-white">
+      <div className="relative flex flex-col items-center">
+        <div className="text-[6.5rem] sm:text-[8rem] md:text-[11rem] font-black tracking-tighter neon-text-primary flex items-baseline leading-none text-white text-center">
           <span>{hours}</span>
-          <span className="animate-pulse mx-1 opacity-20">:</span>
+          <span className="animate-pulse mx-2 opacity-10">:</span>
           <span>{minutes}</span>
-          <span className="text-2xl md:text-4xl ml-2 md:ml-4 opacity-20 font-medium tabular-nums">
-            {seconds}
-          </span>
+        </div>
+        <div className="text-3xl md:text-5xl opacity-20 font-black tabular-nums tracking-widest mt-2">
+          {seconds}
         </div>
       </div>
-      <div className="text-xs md:text-base font-bold text-muted-foreground tracking-[0.4em] uppercase opacity-40 text-center">
+      <div className="text-xs md:text-sm font-black text-primary/40 tracking-[0.6em] uppercase text-center mt-4">
         {time.toLocaleDateString('tr-TR', {
           weekday: "long",
           month: "long",
@@ -49,9 +49,9 @@ export function ClockDisplay({ isActive }: ClockDisplayProps) {
         })}
       </div>
       {isActive && (
-        <div className="mt-4 flex items-center gap-2 px-5 py-2 bg-primary/10 rounded-full border border-primary/20">
-          <div className="w-1.5 h-1.5 rounded-full bg-primary animate-ping" />
-          <span className="text-[9px] font-black text-primary tracking-[0.2em] uppercase">SİSTEM NÖBETTE</span>
+        <div className="mt-8 flex items-center gap-3 px-6 py-2.5 bg-primary/10 rounded-full border border-primary/20">
+          <div className="w-2 h-2 rounded-full bg-primary animate-ping" />
+          <span className="text-[10px] font-black text-primary tracking-[0.3em] uppercase">VIGIL NÖBETTE</span>
         </div>
       )}
     </div>
