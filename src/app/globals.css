@@ -32,7 +32,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-body antialiased;
+    @apply bg-background text-foreground font-body antialiased overflow-x-hidden;
   }
 }
 
@@ -70,7 +70,23 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   transition: background 3s ease-in-out;
 }
 
-/* Hide Turbopack or other overlays if possible */
-#__next-build-watcher, #__next-prerender-indicator {
+/* Next.js Dev Badge & Overlays - AGGRESSIVE HIDE */
+#nextjs-portal, 
+#__next-build-watcher, 
+#__next-prerender-indicator,
+[data-nextjs-toast],
+[data-nextjs-dialog],
+[data-nextjs-vitals],
+.nextjs-toast,
+#ND_ROOT_CONTAINER,
+[id^="__next"] {
   display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Scrollbar Hide */
+::-webkit-scrollbar {
+  display: none;
 }

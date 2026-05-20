@@ -160,8 +160,8 @@ export function GuardianWakeApp() {
         <AlarmStatus state={systemState} countdown={countdown} />
       </header>
 
-      <main className="flex-1 flex flex-col items-center justify-center py-6 px-4 w-full">
-        <div className="w-full max-w-[360px] md:max-w-[420px] flex flex-col items-center space-y-8 md:space-y-12">
+      <main className="flex-1 flex flex-col items-center justify-center w-full px-4 py-6">
+        <div className="w-full max-w-[360px] md:max-w-[420px] mx-auto flex flex-col items-center space-y-12">
           
           <div className="w-full flex justify-center">
             <ClockDisplay isActive={systemState === 'active'} />
@@ -169,20 +169,20 @@ export function GuardianWakeApp() {
           
           <div className="w-full flex flex-col items-center">
             {systemState === 'countdown' ? (
-              <div className="w-full flex flex-col items-center space-y-8 animate-in fade-in zoom-in duration-700 bg-white/5 backdrop-blur-xl p-8 md:p-10 rounded-[3rem] border border-white/10 shadow-2xl">
+              <div className="w-full flex flex-col items-center space-y-10 animate-in fade-in zoom-in duration-700 bg-white/5 backdrop-blur-xl p-10 rounded-[3rem] border border-white/10 shadow-2xl">
                 <div className="flex items-center gap-3 text-primary animate-pulse">
-                  <span className="text-sm font-bold uppercase tracking-[0.2em]">DOĞRULAMA BEKLENİYOR</span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.3em]">DOĞRULAMA BEKLENİYOR</span>
                 </div>
                 <button
                   onClick={handleDismiss}
-                  className="w-56 h-56 md:w-64 md:h-64 rounded-full bg-primary text-background text-2xl font-black shadow-[0_0_50px_rgba(var(--primary),0.3)] hover:scale-105 active:scale-95 transition-all flex flex-col items-center justify-center border-8 border-white/10"
+                  className="w-60 h-60 rounded-full bg-primary text-background text-2xl font-black shadow-[0_0_60px_rgba(var(--primary),0.3)] hover:scale-105 active:scale-95 transition-all flex flex-col items-center justify-center border-[12px] border-white/5"
                 >
                   GÜVENDENİM
-                  <span className="text-[10px] font-bold opacity-70 mt-3 tracking-widest uppercase">DURDURMAK İÇİN BAS</span>
+                  <span className="text-[9px] font-bold opacity-60 mt-3 tracking-widest uppercase">DOKUN VE İPTAL ET</span>
                 </button>
               </div>
             ) : (
-              <div className="w-full bg-black/40 backdrop-blur-2xl border border-white/5 rounded-[3rem] p-6 md:p-10 space-y-10 shadow-2xl flex flex-col items-center">
+              <div className="w-full bg-black/40 backdrop-blur-3xl border border-white/5 rounded-[3rem] p-8 space-y-10 shadow-2xl flex flex-col items-center">
                 <AlarmScheduler 
                   activeAlarm={alarmTime} 
                   activeDays={alarmDays}
@@ -203,11 +203,11 @@ export function GuardianWakeApp() {
           </div>
 
           {systemState === 'active' && alarmTime && (
-            <div className="flex flex-col items-center gap-2 pb-8 animate-in fade-in slide-in-from-bottom-6 duration-1000">
-              <div className="flex items-center gap-4 bg-primary/10 px-8 py-3 rounded-full border border-primary/20 shadow-xl shadow-primary/5">
+            <div className="flex flex-col items-center gap-2 pb-12 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+              <div className="flex items-center gap-4 bg-primary/10 px-8 py-3 rounded-full border border-primary/20">
                 <span className="text-2xl font-black text-primary tabular-nums tracking-tighter">{alarmTime}</span>
               </div>
-              <span className="text-[9px] font-black uppercase tracking-[0.4em] text-primary/40">AKTİF NÖBET PERİYODU</span>
+              <span className="text-[9px] font-black uppercase tracking-[0.5em] text-primary/30">AKTİF KORUMA</span>
             </div>
           )}
         </div>
