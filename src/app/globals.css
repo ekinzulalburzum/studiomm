@@ -59,3 +59,13 @@ input[type=number] {
 input[type="time"]::-webkit-calendar-picker-indicator {
   display: none;
 }
+
+/* Dynamic Themes */
+.theme-morning { background: linear-gradient(180deg, #1e3a8a 0%, #020617 100%); }
+.theme-day { background: linear-gradient(180deg, #0f172a 0%, #020617 100%); }
+.theme-evening { background: linear-gradient(180deg, #451a03 0%, #020617 100%); }
+.theme-night { background: linear-gradient(180deg, #000000 0%, #020617 100%); }
+
+.transition-bg {
+  transition: background 2s ease-in-out;
+}

@@ -9,6 +9,7 @@ import {TriggerOverlay} from './TriggerOverlay';
 import {generateEmergencyCallMessage} from '@/ai/flows/generate-emergency-call-message';
 import {useToast} from '@/hooks/use-toast';
 import {Bell} from 'lucide-react';
+import {cn} from '@/lib/utils';
 
 const ALARM_SOUNDS = [
   "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
@@ -32,10 +33,25 @@ export function GuardianWakeApp() {
   const [countdown, setCountdown] = useState(300);
   const [aiMessage, setAiMessage] = useState("");
   const [isCalling, setIsCalling] = useState(false);
+  const [timeTheme, setTimeTheme] = useState('theme-night');
 
   const countdownInterval = useRef<NodeJS.Timeout | null>(null);
   const alarmCheckInterval = useRef<NodeJS.Timeout | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Saate göre tema değişimi
+  useEffect(() => {
+    const updateTheme = () => {
+      const hour = new Date().getHours();
+      if (hour >= 6 && hour < 11) setTimeTheme('theme-morning');
+      else if (hour >= 11 && hour < 18) setTimeTheme('theme-day');
+      else if (hour >= 18 && hour < 22) setTimeTheme('theme-evening');
+      else setTimeTheme('theme-night');
+    };
+    updateTheme();
+    const interval = setInterval(updateTheme, 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     alarmCheckInterval.current = setInterval(() => {
@@ -139,58 +155,66 @@ export function GuardianWakeApp() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground selection:bg-primary/20 overflow-x-hidden">
+    <div className={cn("min-h-screen flex flex-col transition-bg overflow-x-hidden", timeTheme)}>
       <audio ref={audioRef} hidden />
       
-      <header className="container mx-auto py-6 px-4 flex items-center justify-center sticky top-0 bg-background/80 backdrop-blur-xl z-40 border-b border-white/5">
+      <header className="w-full py-6 px-4 flex items-center justify-center sticky top-0 backdrop-blur-md z-40">
         <AlarmStatus state={systemState} countdown={countdown} />
       </header>
 
-      <main className="container mx-auto flex-1 flex flex-col items-center py-8 px-4 max-w-2xl">
-        <div className="w-full space-y-12">
-          <ClockDisplay isActive={systemState === 'active'} />
+      <main className="container mx-auto flex-1 flex flex-col items-center justify-center py-6 px-4 max-w-lg">
+        <div className="w-full flex flex-col items-center space-y-10">
           
-          {systemState === 'countdown' && (
-            <div className="flex flex-col items-center space-y-8 animate-in fade-in zoom-in duration-700 bg-primary/5 p-10 rounded-[3rem] border border-primary/10">
-              <div className="flex items-center gap-3 text-primary animate-pulse">
-                <Bell className="w-6 h-6" />
-                <span className="text-lg font-bold uppercase tracking-[0.2em]">DOĞRULAMA BEKLENİYOR</span>
+          {/* Üst Kısım: Saat Göstergesi */}
+          <div className="w-full flex justify-center">
+            <ClockDisplay isActive={systemState === 'active'} />
+          </div>
+          
+          {/* Orta Kısım: Doğrulama veya Ayarlar */}
+          <div className="w-full flex flex-col items-center">
+            {systemState === 'countdown' ? (
+              <div className="w-full flex flex-col items-center space-y-8 animate-in fade-in zoom-in duration-700 bg-white/5 backdrop-blur-xl p-10 rounded-[3rem] border border-white/10 shadow-2xl">
+                <div className="flex items-center gap-3 text-primary animate-pulse">
+                  <Bell className="w-6 h-6" />
+                  <span className="text-lg font-bold uppercase tracking-[0.2em]">DOĞRULAMA BEKLENİYOR</span>
+                </div>
+                <button
+                  onClick={handleDismiss}
+                  className="w-56 h-56 md:w-64 md:h-64 rounded-full bg-primary text-background text-3xl font-black shadow-[0_0_50px_rgba(var(--primary),0.3)] hover:scale-105 active:scale-95 transition-all flex flex-col items-center justify-center border-8 border-white/10"
+                >
+                  GÜVENDENİM
+                  <span className="text-[10px] font-bold opacity-70 mt-3 tracking-widest uppercase">DURDURMAK İÇİN BAS</span>
+                </button>
               </div>
-              <button
-                onClick={handleDismiss}
-                className="w-64 h-64 rounded-full bg-primary text-background text-3xl font-black shadow-[0_0_50px_rgba(var(--primary),0.3)] hover:scale-105 active:scale-95 transition-all flex flex-col items-center justify-center border-8 border-white/10"
-              >
-                GÜVENDENİM
-                <span className="text-[10px] font-bold opacity-70 mt-3 tracking-widest uppercase">DURDURMAK İÇİN BAS</span>
-              </button>
-            </div>
-          )}
-
-          <div className="bg-card/50 backdrop-blur-sm border border-white/5 rounded-[3rem] p-8 md:p-12 space-y-12 shadow-2xl">
-            <AlarmScheduler 
-              activeAlarm={alarmTime} 
-              activeDays={alarmDays}
-              onSetAlarm={setAlarm}
-              onClearAlarm={() => {
-                setAlarmTime(null);
-                setAlarmDays([]);
-                setSystemState("standby");
-              }} 
-            />
-            
-            <BackupContact 
-              contact={contact} 
-              onUpdate={setContact} 
-            />
+            ) : (
+              <div className="w-full bg-black/30 backdrop-blur-xl border border-white/5 rounded-[3.5rem] p-8 md:p-10 space-y-10 shadow-2xl flex flex-col items-center">
+                <AlarmScheduler 
+                  activeAlarm={alarmTime} 
+                  activeDays={alarmDays}
+                  onSetAlarm={setAlarm}
+                  onClearAlarm={() => {
+                    setAlarmTime(null);
+                    setAlarmDays([]);
+                    setSystemState("standby");
+                  }} 
+                />
+                
+                <BackupContact 
+                  contact={contact} 
+                  onUpdate={setContact} 
+                />
+              </div>
+            )}
           </div>
 
+          {/* Alt Kısım: Aktif Bilgi */}
           {systemState === 'active' && alarmTime && (
-            <div className="flex flex-col items-center gap-4 py-8 animate-in fade-in slide-in-from-bottom-6 duration-1000">
-              <div className="flex items-center gap-4 bg-primary/10 px-10 py-4 rounded-[2rem] border border-primary/20 shadow-xl shadow-primary/5">
-                <Bell className="w-6 h-6 text-primary" />
-                <span className="text-4xl font-black text-primary tabular-nums">{alarmTime}</span>
+            <div className="flex flex-col items-center gap-4 pb-8 animate-in fade-in slide-in-from-bottom-6 duration-1000">
+              <div className="flex items-center gap-4 bg-primary/10 px-8 py-4 rounded-[2rem] border border-primary/20 shadow-xl shadow-primary/5">
+                <Bell className="w-5 h-5 text-primary" />
+                <span className="text-3xl font-black text-primary tabular-nums">{alarmTime}</span>
               </div>
-              <span className="text-[11px] font-black uppercase tracking-[0.5em] text-primary/40">AKTİF NÖBET PERİYODU</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.5em] text-primary/40">AKTİF NÖBET PERİYODU</span>
             </div>
           )}
         </div>
